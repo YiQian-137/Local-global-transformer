@@ -12,19 +12,11 @@ import numpy as np
 import random
 import torch.nn.functional as F
 
-def setup_seed(seed):
-    torch.manual_seed(seed)   
-    torch.cuda.manual_seed_all(seed)  
-    np.random.seed(seed)
-    random.seed(seed)
-    torch.backends.cudnn.deterministic = True  
-
-
 def train():
     model = TransformerPE()
     model.to(device)
     Epoch = 1800
-    optimizer = optim.Adam(model.parameters(), lr=0.002, betas=(0.9, 0.99), eps=1e-08)  # alt+enter
+    optimizer = optim.Adam(model.parameters(), lr=0.002, betas=(0.9, 0.99), eps=1e-08, weight_decay=0.0001)  # alt+enter
     scheduler = lr_scheduler.MultiStepLR(optimizer, [500], 0.5)
     criterion = nn.MSELoss()
     model.train()
@@ -122,7 +114,6 @@ def test():
 
 if __name__ == '__main__':
     start = time.time()
-    setup_seed(0)
 
     unit1 = [0, 1, 2, 3, 41, 42, 43, 44]
     unit2 = [5, 6, 7, 8, 20, 50, 51]
